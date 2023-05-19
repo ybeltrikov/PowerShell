@@ -5,7 +5,8 @@ Function Measure-PascalCase {
         The variables names should be in PascalCase.
 
     .DESCRIPTION
-        Variable names should be in PascalCase.
+        Variable names should use a consistent capitalization style, i.e. : PascalCase.
+        In PascalCase, only the first letter is capitalized. Or, if the variable name is made of multiple concatenated words, only the first letter of each concatenated word is capitalized.
         To fix a violation of this rule, please consider using PascalCase for variable names.
 
     .EXAMPLE
@@ -80,42 +81,5 @@ Function Measure-PascalCase {
         }
     }
 
-Function Measure-Backtick     {
-        [CmdletBinding()]
-        [OutputType([Microsoft.Windows.Powershell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
-        Param
-        (
-            [Parameter(Mandatory = $true)]
-            [ValidateNotNullOrEmpty()]
-            [System.Management.Automation.Language.Token[]]
-            $Token
-        )
-    
-        Process
-        {
-            $results = @()
-    
-            try
-            {
-                # Finds LineContinuation tokens
-                $lcTokens = $Token | Where-Object {$PSItem.Kind -eq [System.Management.Automation.Language.TokenKind]::LineContinuation}
-    
-                foreach ($lcToken in $lcTokens)
-                {
-                    $result = New-Object `
-                                -Typename "Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord" `
-                                -ArgumentList $Messages.MeasureBacktick,$lcToken.Extent,$PSCmdlet.MyInvocation.InvocationName,Warning,$null
-    
-                    $results += $result
-                }
-    
-                return $results
-            }
-            catch
-            {
-                $PSCmdlet.ThrowTerminatingError($PSItem)
-            }
-        }
-    }
 
     Export-ModuleMember -Function Measure-*

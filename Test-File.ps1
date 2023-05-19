@@ -1,9 +1,17 @@
+#File with different PsScriptAnalyzer violations
+
+#Using alias
 gps
 
+#not using PascalCase
 $nowNow = Get-Date
+Write-Output $nowNow
 
-$NowDate = Get-Date
-Write-Output $NowDate
+#using semicolon
+$sdsdd_dsds = Get-Date;
 
-$sdsdd_dsds = Get-Date
+Write-Output `
+    "Some text"
+`
+`
 

@@ -1,6 +1,7 @@
 @{
-    CustomRulePath='.\.vscode\CustomPSScriptAnalyzerRules.psm1'
-    IncludeDefaultRules=$true
+    CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules.psm1'
+    #CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules-OneRule.psm1'
+    IncludeDefaultRules = $true
     Rules = @{
         PSAvoidLongLines  = @{
             Enable     = $true
