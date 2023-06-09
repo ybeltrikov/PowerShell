@@ -1,7 +1,7 @@
 @{
-    CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules.psm1'
+    #CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules.psm1'
     #CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules-Pascal.psm1'
-    #CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules-Backtick.psm1'
+    CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules-Backtick.psm1'
     IncludeDefaultRules = $true
     Rules = @{
         PSAvoidLongLines  = @{

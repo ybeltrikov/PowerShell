@@ -33,3 +33,12 @@ Write-Output `
 `
 `
 
+Write-Output "Output 1"
+$date = Get-Date
+Write-Output $date
+Get-Date `
+    -Verbose
+
+#show-ast shows AST objects tree - very visual
+# comes with ShowPSAst module
+Show-Ast 
