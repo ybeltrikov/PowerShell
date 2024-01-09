@@ -1,7 +1,5 @@
 @{
-    #CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules.psm1'
-    #CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules-Pascal.psm1'
-    CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules-Backtick.psm1'
+    CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules.psm1'
     IncludeDefaultRules = $true
     Rules = @{
         PSAvoidLongLines  = @{
@@ -41,6 +39,14 @@
             PipelineIndentation = 'IncreaseIndentationForFirstPipeline'
             Kind = 'space'
         }
+        PSProvideCommentHelp = @ {
+            Enable = $true
+            ExportedOnly = $false
+            BlockComment = $true
+            VSCodeSnippetCorrection = $false
+            Placement = 'before'
+        }
+        
     }
     ExcludeRules = @(
     )
