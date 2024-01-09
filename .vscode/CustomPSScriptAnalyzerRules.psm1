@@ -126,7 +126,7 @@ Function Measure-CamelCase {
                 If ($Ast -is [System.Management.Automation.Language.VariableExpressionAst]) {
 
                     [System.Management.Automation.Language.VariableExpressionAst]$VariableAst = $Ast
-                    If (($VariableAst.VariablePath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -or ($VariableAst.Left.VariablePath.UserPath -cmatch '_')) {
+                    If ((($VariableAst.VariablePath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -and ($VariableAst.VariablePath -ne '_')) -or ($VariableAst.VariablePath -match '._.')) {
                         $ReturnValue = $True
                     }
                 }
