@@ -2,12 +2,12 @@
     CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules.psm1'
     IncludeDefaultRules = $true
     Rules = @{
-        PSAvoidLongLines  = @{
-            Enable     = $true
+        PSAvoidLongLines = @{
+            Enable = $true
             MaximumLineLength = 115
         }
-        PSAvoidSemicolonsAsLineTerminators  = @{
-            Enable     = $true
+        PSAvoidSemicolonsAsLineTerminators = @{
+            Enable = $true
         }
         PSPlaceCloseBrace = @{
             Enable = $true
@@ -21,16 +21,16 @@
             NewLineAfter = $true
             IgnoreOneLineBlock = $true
         }
-        PSUseConsistentWhitespace  = @{
-            Enable                          = $true
-            CheckInnerBrace                 = $true
-            CheckOpenBrace                  = $true
-            CheckOpenParen                  = $true
-            CheckOperator                   = $true
-            CheckPipe                       = $true
+        PSUseConsistentWhitespace = @{
+            Enable = $true
+            CheckInnerBrace = $true
+            CheckOpenBrace = $true
+            CheckOpenParen = $true
+            CheckOperator = $true
+            CheckPipe = $true
             CheckPipeForRedundantWhitespace = $false
-            CheckSeparator                  = $true
-            CheckParameter                  = $false
+            CheckSeparator = $true
+            CheckParameter = $false
             IgnoreAssignmentOperatorInsideHashTable = $false
         }
         PSUseConsistentIndentation = @{
@@ -39,14 +39,14 @@
             PipelineIndentation = 'IncreaseIndentationForFirstPipeline'
             Kind = 'space'
         }
-        PSProvideCommentHelp = @ {
+        PSProvideCommentHelp = @{
             Enable = $true
             ExportedOnly = $false
             BlockComment = $true
             VSCodeSnippetCorrection = $false
             Placement = 'before'
         }
-        
+
     }
     ExcludeRules = @(
     )
