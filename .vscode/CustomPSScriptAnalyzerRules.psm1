@@ -123,10 +123,10 @@ Function Measure-CamelCase {
                 Param ([System.Management.Automation.Language.Ast]$Ast)
 
                 [bool]$ReturnValue = $False
-                If ($Ast -is [System.Management.Automation.Language.AssignmentStatementAst]) {
+                If ($Ast -is [System.Management.Automation.Language.VariableExpressionAst]) {
 
-                    [System.Management.Automation.Language.AssignmentStatementAst]$VariableAst = $Ast
-                    If (($VariableAst.Left.VariablePath.UserPath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -or ($VariableAst.Left.VariablePath.UserPath -cmatch '_')) {
+                    [System.Management.Automation.Language.VariableExpressionAst]$VariableAst = $Ast
+                    If (($VariableAst.VariablePath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -or ($VariableAst.Left.VariablePath.UserPath -cmatch '_')) {
                         $ReturnValue = $True
                     }
                 }

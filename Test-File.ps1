@@ -12,6 +12,8 @@ $now_date = Get-Date
 
 [System.Collections.ArrayList]$labels = @()
 
+[string]$variable = 'hello'
+$variable = 'hello again'
 
 Write-Output $nowNow
 Write-Output $now_date
@@ -36,6 +38,7 @@ Write-Output `
 Write-Output "Output 1"
 $date = Get-Date
 Write-Output $date
+Write-Output $variable
 Get-Date `
     -Verbose
 
@@ -44,4 +47,4 @@ Get-Date `
 
 #show-ast shows AST objects tree - very visual
 # comes with ShowPSAst module
-Show-Ast
+Show-Ast -InputObject .\Test-File.ps1
