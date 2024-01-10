@@ -12,6 +12,8 @@ $now_date = Get-Date
 
 Get-Process | Where-Object -FilterScript { $_.ProcessName -eq 'svchost' }
 
+$PSItem
+
 [System.Collections.ArrayList]$labels = @()
 
 [string]$variable = 'hello'
@@ -60,10 +62,11 @@ $string2 -cnotmatch $regex2
 (($string1 -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -and ($string1 -ne '_')) -or ($string1 -match '._.')
 
 ((($string -cnotmatch $regex2) -and ($string2 -ne '_')) -or ($string2 -match $regex))
+$VariableAst.VariablePath = '_'
+
+(($VariableAst.VariablePath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -and ($VariableAst.VariablePath -ne '_')) -or ($VariableAst.VariablePath -match '._.')
 
 #show-ast shows AST objects tree - very visual
 # comes with ShowPSAst module
-Show-Ast -InputObject .\Test-File.ps1 -Verbose
+Show-Ast -InputObject .\Test-File.ps1
 
-$processes = Get-Process
-$firstProcess = $processes[0]

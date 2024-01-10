@@ -97,9 +97,9 @@ Function Measure-CamelCase {
         .OUTPUTS
             [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]]
 
-.NOTES
-    https://msdn.microsoft.com/en-us/library/dd878270(v=vs.85).aspx
-    https://msdn.microsoft.com/en-us/library/ms229043(v=vs.110).aspx
+        .NOTES
+            https://msdn.microsoft.com/en-us/library/dd878270(v=vs.85).aspx
+            https://msdn.microsoft.com/en-us/library/ms229043(v=vs.110).aspx
 #>
 
     [CmdletBinding()]
@@ -111,6 +111,53 @@ Function Measure-CamelCase {
         [System.Management.Automation.Language.ScriptBlockAst]
         $ScriptBlockAst
     )
+
+    Begin {
+        #the variable names below will not be reported by the PS Script Analyzer rule
+        #shorted list from https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_automatic_variables?view=powershell-7.4
+        $exceptionList = @(
+            '_'
+            '$'
+            '?'
+            '^'
+            '_'
+            'ConsoleFileName'
+            'EnabledExperimentalFeatures'
+            'Error'
+            'Event'
+            'EventArgs'
+            'EventSubscriber'
+            'ExecutionContext'
+            'HOME'
+            'Host'
+            'IsCoreCLR'
+            'IsLinux'
+            'IsMacOS'
+            'IsWindows'
+            'LASTEXITCODE'
+            'Matches'
+            'MyInvocation'
+            'NestedPromptLevel'
+            'PID'
+            'PROFILE'
+            'PSBoundParameters'
+            'PSCmdlet'
+            'PSCommandPath'
+            'PSCulture'
+            'PSDebugContext'
+            'PSEdition'
+            'PSHOME'
+            'PSItem'
+            'PSScriptRoot'
+            'PSSenderInfo'
+            'PSUICulture'
+            'PSVersionTable'
+            'PWD'
+            'Sender'
+            'ShellId'
+            'StackTrace'
+        )
+    }
 
     Process {
 
@@ -124,10 +171,12 @@ Function Measure-CamelCase {
 
                 [bool]$ReturnValue = $False
                 If ($Ast -is [System.Management.Automation.Language.VariableExpressionAst]) {
-
                     [System.Management.Automation.Language.VariableExpressionAst]$VariableAst = $Ast
-                    If ((($VariableAst.VariablePath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -and ($VariableAst.VariablePath -ne '_')) -or ($VariableAst.VariablePath -match '._.')) {
-                        $ReturnValue = $True
+                    If (($VariableAst.VariablePath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -or ($VariableAst.VariablePath -match '._.')) {
+                        $ReturnValue = $true
+                    }
+                    if ($VariableAst.VariablePath -in $exceptionList) {
+                        $ReturnValue = $false
                     }
                 }
                 return $ReturnValue
@@ -158,6 +207,8 @@ Function Measure-CamelCase {
             $PSCmdlet.ThrowTerminatingError($_)
         }
     }
+
+    End {}
 }
 
 Function Measure-Backtick {
