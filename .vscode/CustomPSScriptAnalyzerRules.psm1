@@ -123,7 +123,9 @@ Function Measure-CamelCase {
             '_'
             'ConsoleFileName'
             'EnabledExperimentalFeatures'
+            'env:*'
             'Error'
+            'ErrorActionPreference'
             'Event'
             'EventArgs'
             'EventSubscriber'
@@ -153,9 +155,11 @@ Function Measure-CamelCase {
             'PSUICulture'
             'PSVersionTable'
             'PWD'
+            'script:*'
             'Sender'
             'ShellId'
             'StackTrace'
+            'Using:*'
         )
     }
 
@@ -175,7 +179,13 @@ Function Measure-CamelCase {
                     If (($VariableAst.VariablePath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -or ($VariableAst.VariablePath -match '._.')) {
                         $ReturnValue = $true
                     }
-                    if ($VariableAst.VariablePath -in $exceptionList) {
+                    foreach ($exception in $exceptionList) {
+                        if ($VariableAst.VariablePath -like $exception) {
+                            $ReturnValue = $false
+                            break
+                        }
+                    }
+                    if ($VariableAst.Parent -is [System.Management.Automation.Language.ParameterAst]) {
                         $ReturnValue = $false
                     }
                 }

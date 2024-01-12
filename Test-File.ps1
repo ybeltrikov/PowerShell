@@ -1,4 +1,7 @@
 #File with different PsScriptAnalyzer violations
+#show-ast shows AST objects tree - very visual
+# comes with ShowPSAst module
+Show-Ast -InputObject .\Test-File.ps1
 
 #Using alias
 gps
@@ -13,6 +16,7 @@ $now_date = Get-Date
 Get-Process | Where-Object -FilterScript { $_.ProcessName -eq 'svchost' }
 
 $PSItem
+$env:Path
 
 [System.Collections.ArrayList]$labels = @()
 
@@ -66,7 +70,21 @@ $VariableAst.VariablePath = '_'
 
 (($VariableAst.VariablePath -cnotmatch '^[a-z]+([A-Za-z0-9]+)+') -and ($VariableAst.VariablePath -ne '_')) -or ($VariableAst.VariablePath -match '._.')
 
-#show-ast shows AST objects tree - very visual
-# comes with ShowPSAst module
-Show-Ast -InputObject .\Test-File.ps1
 
+
+$ErrorActionPreference = 'Break'
+$script:foo = 'bar'
+$ENV:APPDATA
+$Env:AppDate
+$True
+$Using:exclude
+
+
+function SameplFunction {
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty]
+        $SampleParameterName
+    )
+
+}
