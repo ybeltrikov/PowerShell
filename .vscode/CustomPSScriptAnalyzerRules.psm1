@@ -274,4 +274,79 @@ Function Measure-Backtick {
     }
 }
 
+Function Measure-DoubleQuoteString {
+    <#
+    .SYNOPSIS
+        Only use double quotes in expandable strings
+    .DESCRIPTION
+        Avoid using those double quotes in static strings.
+        To fix a violation of this rule, please replace double quotes with single ones
+    .EXAMPLE
+        Measure-Backtick -Token $Token
+    .INPUTS
+        [System.Management.Automation.Language.Token[]]
+    .OUTPUTS
+        [Microsoft.Windows.Powershell.ScriptAnalyzer.Generic.DiagnosticRecord[]]
+    .NOTES
+        Reference: Windows PowerShell Best Practices.
+    #>
+
+    [CmdletBinding()]
+    [OutputType([Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
+    Param
+    (
+        [Parameter(Mandatory = $True)]
+        [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.Language.ScriptBlockAst]
+        $ScriptBlockAst
+    )
+
+    Process {
+
+        $results = @()
+
+        try {
+            #region Define predicates to find ASTs.
+
+            [ScriptBlock]$Predicate = {
+                Param ([System.Management.Automation.Language.Ast]$Ast)
+
+                [bool]$ReturnValue = $False
+                If ($Ast -is [System.Management.Automation.Language.StringConstantExpressionAst]) {
+                    $quoteType = $Ast.Extent.Text[0]
+                    If (($quoteType -eq '"') -and ($Ast -notmatch '\$\(?')) {
+                        $ReturnValue = $True
+                    }
+                }
+                return $ReturnValue
+            }
+            #endregion
+
+            #region Finds ASTs that match the predicates.
+            [System.Management.Automation.Language.Ast[]]$Violations = $ScriptBlockAst.FindAll($Predicate, $True)
+
+            If ($Violations.Count -ne 0) {
+
+                Foreach ($Violation in $Violations) {
+
+                    $Result = [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
+                        RuleName = $PSCmdlet.MyInvocation.InvocationName
+                        Message = "$((Get-Help $MyInvocation.MyCommand.Name).Description.Text)"
+                        Extent = $Violation.Extent
+                        "Severity" = "Information"
+                        #TODO: add code for suggested correction
+                        "SuggestedCorrections" = $null
+                    }
+                    $Results += $Result
+                }
+            }
+            return $Results
+            #endregion
+        }
+        catch {
+            $PSCmdlet.ThrowTerminatingError($_)
+        }
+    }
+}
+
 Export-ModuleMember -Function Measure-*

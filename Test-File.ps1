@@ -3,6 +3,13 @@
 # comes with ShowPSAst module
 Show-Ast -InputObject .\Test-File.ps1
 
+#strings
+$variable = "string"
+"string and $variable"
+"string and $($variable.Length)"
+'As they say, "live and learn."'
+
+
 #Using alias
 gps
 
