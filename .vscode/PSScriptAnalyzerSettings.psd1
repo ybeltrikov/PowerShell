@@ -2,6 +2,9 @@
     CustomRulePath = '.\.vscode\CustomPSScriptAnalyzerRules.psm1'
     IncludeDefaultRules = $true
     Rules = @{
+        PSAvoidUsingDoubleQuotesForConstantString = @{
+            Enable = $true
+        }
         PSAvoidLongLines = @{
             Enable = $true
             MaximumLineLength = 115

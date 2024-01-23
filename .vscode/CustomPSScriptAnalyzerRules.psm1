@@ -274,6 +274,9 @@ Function Measure-Backtick {
     }
 }
 
+
+<# This seems redundant as there is a built-in rule
+
 Function Measure-DoubleQuoteString {
     <#
     .SYNOPSIS
@@ -365,5 +368,6 @@ Function Measure-DoubleQuoteString {
         }
     }
 }
+#>
 
 Export-ModuleMember -Function Measure-*
