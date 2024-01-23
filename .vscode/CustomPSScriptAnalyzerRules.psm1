@@ -282,7 +282,7 @@ Function Measure-DoubleQuoteString {
         Avoid using those double quotes in static strings.
         To fix a violation of this rule, please replace double quotes with single ones
     .EXAMPLE
-        Measure-Backtick -Token $Token
+        Measure-DoubleQuoteString -ScriptBlockAst $ScriptBlockAst
     .INPUTS
         [System.Management.Automation.Language.Token[]]
     .OUTPUTS
@@ -325,22 +325,39 @@ Function Measure-DoubleQuoteString {
             #region Finds ASTs that match the predicates.
             [System.Management.Automation.Language.Ast[]]$Violations = $ScriptBlockAst.FindAll($Predicate, $True)
 
-            If ($Violations.Count -ne 0) {
+            If ($violations.Count -ne 0) {
 
-                Foreach ($Violation in $Violations) {
+                Foreach ($violation in $violations) {
 
-                    $Result = [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
+                    $correctedCode = $violation.Extent.Text.Replace('"', "'")
+                    [int]$startLineNumber = $violation.Extent.StartLineNumber
+                    [int]$endLineNumber = $violation.Extent.EndLineNumber
+                    [int]$startColumnNumber = $violation.Extent.StartColumnNumber
+                    [int]$endColumnNumber = $violation.Extent.EndColumnNumber
+                    [string]$correction = $correctedCode
+                    [string]$file = $MyInvocation.MyCommand.Definition
+                    [string]$optionalDescription = 'Replace double quotes with single ones'
+                    $objParams = @{
+                        TypeName = 'Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent'
+                        ArgumentList = $startLineNumber, $endLineNumber, $startColumnNumber,
+                                       $endColumnNumber, $correction, $file, $optionalDescription
+                    }
+                    $correctionExtent = New-Object @objParams
+                    $suggestedCorrections = New-Object System.Collections.ObjectModel.Collection[$($objParams.TypeName)]
+                    $suggestedCorrections.add($correctionExtent) | Out-Null
+
+                    $result = [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
                         RuleName = $PSCmdlet.MyInvocation.InvocationName
                         Message = "$((Get-Help $MyInvocation.MyCommand.Name).Description.Text)"
-                        Extent = $Violation.Extent
+                        Extent = $violation.Extent
                         "Severity" = "Information"
                         #TODO: add code for suggested correction
-                        "SuggestedCorrections" = $null
+                        "SuggestedCorrections" = $suggestedCorrections
                     }
-                    $Results += $Result
+                    $results += $result
                 }
             }
-            return $Results
+            return $results
             #endregion
         }
         catch {
