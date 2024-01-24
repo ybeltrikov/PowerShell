@@ -94,4 +94,6 @@ function SameplFunction {
         $SampleParameterName
     )
 
+    Write-Output $SampleParameterName
+
 }
